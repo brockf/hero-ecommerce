@@ -16,7 +16,7 @@ define('ADDTYPE_RESIDENTIAL', 1);
 define('ADDTYPE_COMMERCIAL', 2);
 
 class Store_module extends Module {
-	var $version = '1.43';
+	var $version = '1.44';
 	var $name = 'store';
 
 	function __construct () {
@@ -350,6 +350,11 @@ class Store_module extends Module {
 		if ($db_version < 1.43)
 		{
 			$this->CI->db->query('ALTER TABLE `order_details` ADD COLUMN `address_type` TINYINT(1) NOT NULL DEFAULT 0');
+		}
+		
+		if ($db_version < 1.44)
+		{
+			$this->CI->db->query('ALTER TABLE `shipping_received` ADD COLUMN `shipping_desc` VARCHAR(250) NOT NULL DEFAULT 0');
 		}
 
 		// return current version

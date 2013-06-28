@@ -24,10 +24,11 @@ class Shipping_model extends CI_Model
 	* @param int $charge_id
 	* @param int $shipping_id
 	* @param float $shipping_charge
+	* @param string $shipping_name
 	*
 	* @return boolean 
 	*/
-	function record_shipping ($charge_id, $shipping_id, $shipping_charge, $shipping_name=null) {
+	function record_shipping ($charge_id, $shipping_id, $shipping_charge, $shipping_name = null) {
 		$insert_fields = array(
 							'order_id' => $charge_id,
 							'shipping_id' => $shipping_id,
