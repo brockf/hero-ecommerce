@@ -87,6 +87,10 @@ class Taxes_model extends CI_Model
 			return FALSE;
 		}
 		
+		if ((float)$subscription['amount'] == 0) {
+			return FALSE;
+		}
+		
 		// there might be tax, let's go
 		// find the very first subscription in the line of subscriptions
 		$result = $this->db->select('subscription_id')
