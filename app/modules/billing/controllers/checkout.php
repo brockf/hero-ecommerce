@@ -326,10 +326,19 @@ class Checkout extends Front_Controller {
 		
 		$this->load->library('form_validation');
 		
+		// new or existing billing address?
+		if ($this->input->post('billing_address') == 'existing') {
+			$billing_address_type = 'existing';
+		}
+		else {
+			$billing_address_type = 'new';
+		}
+		
 		// billing address validation
+		
 		$this->form_validation->set_rules('billing_address','Billing Address Type','required');
 		
-		if ($this->input->post('billing_address') == 'new') {
+		if ($billing_address_type == 'new') {
 			$this->form_validation->set_rules('first_name','First Name','required');
 			$this->form_validation->set_rules('last_name','Last Name','required');
 			$this->form_validation->set_rules('address_1','Address','required');
@@ -371,7 +380,7 @@ class Checkout extends Front_Controller {
 		}
 		
 		// build arrays of values in case we need to redirect back to the form
-		if ($this->input->post('billing_address') == 'new') {
+		if ($billing_address_type == 'new') {
 			$billing_values = array(
 								'first_name' => $this->input->post('first_name'),
 								'last_name' => $this->input->post('last_name'),
@@ -415,7 +424,7 @@ class Checkout extends Front_Controller {
 		
 		// we are validated
 		
-		if ($this->input->post('billing_address') == 'new') {
+		if ($billing_address_type == 'new') {
 			// update their billing address
 			
 			// to stay compatible with the old UpdateCustomer code
