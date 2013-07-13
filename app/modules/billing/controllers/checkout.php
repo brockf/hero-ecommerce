@@ -336,8 +336,6 @@ class Checkout extends Front_Controller {
 		
 		// billing address validation
 		
-		$this->form_validation->set_rules('billing_address','Billing Address Type','required');
-		
 		if ($billing_address_type == 'new') {
 			$this->form_validation->set_rules('first_name','First Name','required');
 			$this->form_validation->set_rules('last_name','Last Name','required');
