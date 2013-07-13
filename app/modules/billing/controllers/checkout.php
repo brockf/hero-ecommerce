@@ -414,7 +414,7 @@ class Checkout extends Front_Controller {
 			$shipping_values = array();
 		}
 		
-		if ($this->form_validation->run() === FALSE) {
+		if (!empty($this->form_validation->_config_rules) and $this->form_validation->run() === FALSE) {
 			$this->session->set_userdata('errors',validation_errors());
 			
 			redirect('checkout/billing_shipping?billing_values=' . query_value_encode(serialize($billing_values)) . '&shipping_values=' . query_value_encode(serialize($shipping_values)));
