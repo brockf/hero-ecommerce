@@ -120,6 +120,23 @@ class Subscription_model extends CI_Model
 	    	}
     	}
 	}
+	
+	/**
+	* Hook: Member Delete
+	*
+	* Called by the member_delete hook
+	*
+	* @param int $member_id
+	*/
+	function hook_member_delete ($member_id) {
+		$subscriptions = $this->get_subscriptions_friendly(array('active' => TRUE), $member_id);
+		
+		foreach ($subscriptions as $subscription) {
+			$this->cancel_subscription($subscription['id']);
+		}
+		
+		return TRUE;
+	}
 
 	/**
 	* Cancel Subscription
@@ -485,7 +502,7 @@ class Subscription_model extends CI_Model
 		$CI =& get_instance();
 
 		cron_log('Beginning billing cronjob.');
-
+		
 		$run_cron = TRUE;
 
 		// cron run time?
