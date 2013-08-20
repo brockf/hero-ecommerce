@@ -12,7 +12,7 @@
 */
 
 class Billing extends Module {
-	var $version = '1.23';
+	var $version = '1.24';
 	var $name = 'billing';
 
 	function __construct () {
@@ -347,6 +347,11 @@ class Billing extends Module {
 			$this->CI->app_hooks->register('checkout_billing_shipping','In checkout, the billing/shipping submission has been processed.',array());
 			$this->CI->app_hooks->register('checkout_shipping_method','In checkout, the shipping method has been selected.',array());
 			$this->CI->app_hooks->register('checkout_payment','In checkout, the payment has been successfully processed.',array());
+		}
+		
+		if ($db_version < '1.24') {
+			$this->CI->load->library('app_hooks');
+			$this->CI->app_hooks->bind('member_delete','Subscription_model','hook_member_delete',APPPATH . 'modules/billing/models/subscription_model.php');
 		}
 
 		// return current version
