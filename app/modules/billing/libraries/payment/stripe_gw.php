@@ -304,7 +304,7 @@ class Stripe_gw {
 
 		// Create the recurring seed - Done this way for token based API's.
 		$response = $this->CreateProfile($gateway, $customer, $credit_card, $subscription_id, $amount, $order_id);
-	die(print_r($response));
+
 		// Process today's payment
 		if ($charge_today === TRUE) {
 			$response = $this->ChargeRecurring($gateway, $order_id, $response['customer_id'], $amount);

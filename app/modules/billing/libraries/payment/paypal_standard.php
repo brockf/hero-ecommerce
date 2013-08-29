@@ -210,6 +210,8 @@ class paypal_standard
 
 		$amount = money_format("%!^i",$amount);
 
+		$subscription = $CI->recurring_model->GetRecurring($subscription_id);
+
 		// when we have a free trial, we want to throw out the initial charge.
 		// this happens for all other gateways but because we setup a billing agreement with PayPal,
 		// it's slightly different
@@ -270,8 +272,6 @@ class paypal_standard
 			$post['AMT'] = $amount;
 
 			$item_description = 'One-time payment';
-
-			$subscription = $CI->recurring_model->GetRecurring($subscription_id);
 
 			if (isset($subscription['plan']['name'])) {
 				$item_description = $subscription['plan']['name'];
