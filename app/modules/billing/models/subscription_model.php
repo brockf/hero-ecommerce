@@ -198,6 +198,35 @@ class Subscription_model extends CI_Model
 			return FALSE;
 		}
 	}
+	
+	/**
+	* Get Log
+	*
+	* Get the transaction log for a given subscription
+	*
+	* @param int $subscription_id
+	*
+	* @return array
+	*/
+	function get_log ($filters) {
+		$result = $this->db->where('subscription_id', $filters['id'])
+						   ->get('transaction_log');
+						   
+		$log = array();				   
+		foreach ($result->result_array() as $logged) {
+			$log[] = array(
+							'ip' => $logged['log_ip'],
+							'date' => $logged['log_date'],
+							'browser' => $logged['log_browser'],
+							'event' => $logged['log_event'],
+							'data' => unserialize($logged['log_data']),
+							'file' => $logged['log_file'],
+							'line' => $logged['log_line']
+						);
+		}
+		
+		return $log;
+	}
 
 	/**
 	* Get Subscriptions Friendly
