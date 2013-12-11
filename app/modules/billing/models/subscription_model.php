@@ -131,8 +131,10 @@ class Subscription_model extends CI_Model
 	function hook_member_delete ($member_id) {
 		$subscriptions = $this->get_subscriptions_friendly(array('active' => TRUE), $member_id);
 		
-		foreach ($subscriptions as $subscription) {
-			$this->cancel_subscription($subscription['id']);
+		if (!empty($subscriptions)) {
+			foreach ($subscriptions as $subscription) {
+				$this->cancel_subscription($subscription['id']);
+			}
 		}
 		
 		return TRUE;
