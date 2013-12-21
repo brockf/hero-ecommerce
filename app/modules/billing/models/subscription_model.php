@@ -57,6 +57,19 @@ class Subscription_model extends CI_Model
 		if (!empty($plan['promotion'])) {
     		$CI->user_model->add_group($subscription['user_id'], $plan['promotion']);
     	}
+    	
+    	// mark the subscription as setup
+    	$CI->db->update('subscriptions', array('completed' => '1'), array('subscription_id' => $subscription_id));
+    	
+    	// any renewal maintenance?
+    	$CI->load->model('billing/charge_data_model');
+    	$data = $CI->charge_data_model->Get('r' . $subscription_id);
+    	
+    	if (isset($data['mark_as_renewed'])) {
+    		$CI->load->model('billing/recurring_model');
+	    	$CI->recurring_model->SetRenew($data['mark_as_renewed'], $subscription_id);
+			$CI->recurring_model->CancelRecurring($data['mark_as_renewed']);
+		}
 	}
 
 	/**
@@ -77,6 +90,19 @@ class Subscription_model extends CI_Model
 		if (!empty($plan['promotion'])) {
     		$CI->user_model->add_group($subscription['user_id'], $plan['promotion']);
     	}
+    	
+    	// mark the subscription as setup
+    	$CI->db->update('subscriptions', array('completed' => '1'), array('subscription_id' => $subscription_id));
+    	
+    	// any renewal maintenance?
+    	$CI->load->model('billing/charge_data_model');
+    	$data = $CI->charge_data_model->Get('r' . $subscription_id);
+    	
+    	if (isset($data['mark_as_renewed'])) {
+    		$CI->load->model('billing/recurring_model');
+	    	$CI->recurring_model->SetRenew($data['mark_as_renewed'], $subscription_id);
+			$CI->recurring_model->CancelRecurring($data['mark_as_renewed']);
+		}
 	}
 
 	/**
@@ -379,6 +405,9 @@ class Subscription_model extends CI_Model
 
 		if (isset($filters['user_id'])) {
 			$this->db->where('users.user_id', $filters['user_id']);
+			
+			// if we are loading subs for a user, we assume we only want subs that are "completed" (i.e., fully set up)
+			$this->db->where('completed','1');
 		}
 
 		if (isset($filters['member_name'])) {

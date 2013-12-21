@@ -643,11 +643,14 @@ class Gateway_model extends CI_Model
 		}
 		
 		if ($response['response_code'] == 100) {
+			// save the "mark_as_renewed" subscription as charge data so we can do this maintenance later
+			// we no longer do this maintenance here because for external gateways, we need to wait
+			// for the user to complete their payment
 			if (!empty($mark_as_renewed)) {
-				$this->CI->recurring_model->SetRenew($mark_as_renewed, $subscription_id);
-				$this->CI->recurring_model->CancelRecurring($mark_as_renewed);
+				$this->CI->load->model('billing/charge_data_model');
+				$this->CI->charge_data_model->Save('r' . $subscription_id, 'mark_as_renewed', $mark_as_renewed);
 			}
-			
+				
 			if (!isset($response['not_completed']) or $response['not_completed'] == FALSE) {
 				$this->CI->recurring_model->SetActive($subscription_id);
 		

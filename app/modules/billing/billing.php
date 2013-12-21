@@ -12,7 +12,7 @@
 */
 
 class Billing extends Module {
-	var $version = '1.24';
+	var $version = '1.25';
 	var $name = 'billing';
 
 	function __construct () {
@@ -352,6 +352,11 @@ class Billing extends Module {
 		if ($db_version < '1.24') {
 			$this->CI->load->library('app_hooks');
 			$this->CI->app_hooks->bind('member_delete','Subscription_model','hook_member_delete',APPPATH . 'modules/billing/models/subscription_model.php');
+		}
+		
+		if ($db_version < '1.25') {
+			$this->CI->db->query('ALTER TABLE `subscriptions` ADD COLUMN `completed` TINYINT(4)');
+			$this->CI->db->query('UPDATE `subscriptions` SET `completed` = \'1\'');
 		}
 
 		// return current version

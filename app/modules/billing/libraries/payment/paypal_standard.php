@@ -225,6 +225,8 @@ class paypal_standard
 
 		// save the initial charge amount (it may be different, so we treat it as a separate first charge)
 		$CI->charge_data_model->Save('r' . $subscription_id, 'first_charge', $amount);
+		
+		// save the "renewed" subscription
 
 		$post_url = $this->GetAPIURL($gateway);
 
