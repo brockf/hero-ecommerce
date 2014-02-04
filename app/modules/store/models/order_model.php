@@ -107,7 +107,7 @@ class Order_model extends CI_Model {
 			}
 
 			// the cart may have some non-products in it, so we'll make sure that this is a product by looking or an ID
-			else if (isset($item['id'])) {
+			elseif (isset($item['id'])) {
 				if ($item['is_subscription'] == FALSE) {
 					$product = $this->products_model->get_product($item['id']);
 
@@ -139,7 +139,7 @@ class Order_model extends CI_Model {
 					// inventory tracking?
 					if ($product['track_inventory'] == TRUE) {
 						// knock down the inventory by the quantity ordered
-						$this->products_model->knock_inventory($product['id'], $item['qty']);
+						$CI->products_model->knock_inventory($product['id'], $item['qty']);
 					}
 
 					// track product in database as part of order
