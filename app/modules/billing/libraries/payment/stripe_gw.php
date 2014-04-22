@@ -223,7 +223,7 @@ class Stripe_gw {
 			// Successful transaction
 			$response = Stripe_Charge::create($data);
 
-			$CI->load->model('order_authorization_model');
+			$CI->load->model('billing/order_authorization_model');
 			$CI->order_authorization_model->SaveAuthorization($order_id, $response->id, $response->id);
 			$CI->charge_model->SetStatus($order_id, 1);
 
@@ -233,7 +233,7 @@ class Stripe_gw {
 		catch (Exception $e)
 		{
 			// Failed Transaction
-			$CI->load->model('charge_model');
+			$CI->load->model('billing/charge_model');
 			$CI->charge_model->SetStatus($order_id, 0);
 
 			$response_array = array('reason' => $e->getMessage());
@@ -298,7 +298,7 @@ class Stripe_gw {
 		$CI =& get_instance();
 
 		// Create an order for today's payment
-		$CI->load->model('charge_model');
+		$CI->load->model('billing/charge_model');
 		$customer['customer_id'] = (isset($customer['customer_id'])) ? $customer['customer_id'] : FALSE;
 		$order_id = $CI->charge_model->CreateNewOrder($gateway['gateway_id'], $amount, $credit_card, $subscription_id, $customer['customer_id'], $CI->input->ip_address());
 
@@ -377,7 +377,7 @@ class Stripe_gw {
 			$response['customer_id'] = $customer->id;
 
 			// Save the Auth information
-			$CI->load->model('recurring_model');
+			$CI->load->model('billing/recurring_model');
 			$CI->recurring_model->SaveApiCustomerReference($subscription_id, $customer->id);
 		}
 		catch (Exception $e)
@@ -429,7 +429,7 @@ class Stripe_gw {
 			$response['auth_code']			= $charge->id;
 
 			// Save the Auth information
-			$CI->load->model('order_authorization_model');
+			$CI->load->model('billing/order_authorization_model');
 			$CI->order_authorization_model->SaveAuthorization($order_id, $response['transaction_num'], $response['auth_code']);
 		} catch (Exception $e)
 		{
