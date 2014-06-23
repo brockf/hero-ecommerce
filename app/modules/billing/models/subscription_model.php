@@ -219,7 +219,7 @@ class Subscription_model extends CI_Model
 			}
 		}
 
-		if ($this->get_subscriptions(array('user_id' => $member_id, 'end_date_after' => time())) !== FALSE) {
+		if ($this->get_subscriptions(array('user_id' => $member_id, 'end_date_after' => date('Y-m-d H:i:s'))) !== FALSE) {
 			return TRUE;
 		}
 		else {
